@@ -1,0 +1,20 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_hotel_booking_ui/language/appLocalizations.dart';
+import 'package:flutter_hotel_booking_ui/models/hotel_list_data.dart';
+import 'package:flutter_hotel_booking_ui/modules/home/status/modules/kosan/components/kosan_components.dart';
+import 'package:flutter_hotel_booking_ui/modules/hotel_booking/components/filter_bar_UI.dart';
+import 'package:flutter_hotel_booking_ui/modules/hotel_booking/components/map_and_list_view.dart';
+import 'package:flutter_hotel_booking_ui/modules/hotel_booking/components/time_date_view.dart';
+import 'package:flutter_hotel_booking_ui/modules/myTrips/hotel_list_view.dart';
+import 'package:flutter_hotel_booking_ui/providers/theme_provider.dart';
+import 'package:flutter_hotel_booking_ui/routes/route_names.dart';
+import 'package:flutter_hotel_booking_ui/utils/enum.dart';
+import 'package:flutter_hotel_booking_ui/utils/text_styles.dart';
+import 'package:flutter_hotel_booking_ui/utils/themes.dart';
+import 'package:flutter_hotel_booking_ui/widgets/common_card.dart';
+import 'package:flutter_hotel_booking_ui/widgets/common_search_bar.dart';
+import 'package:flutter_hotel_booking_ui/widgets/remove_focuse.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+
+part 'kosan_page.dart';
