@@ -9,16 +9,17 @@ import 'package:flutter_hotel_booking_ui/providers/theme_provider.dart';
 import 'package:flutter_hotel_booking_ui/utils/enum.dart';
 import 'package:flutter_hotel_booking_ui/routes/routes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 BuildContext? applicationcontext;
 
-class MotelApp extends StatefulWidget {
+class MagangJogjaApp extends StatefulWidget {
   @override
-  _MotelAppState createState() => _MotelAppState();
+  _MagangJogjaAppState createState() => _MagangJogjaAppState();
 }
 
-class _MotelAppState extends State<MotelApp> {
+class _MagangJogjaAppState extends State<MagangJogjaApp> {
   @override
   Widget build(BuildContext context) {
     return Consumer<ThemeProvider>(
@@ -26,7 +27,7 @@ class _MotelAppState extends State<MotelApp> {
         applicationcontext = context;
 
         final ThemeData _theme = provider.themeData;
-        return MaterialApp(
+        return GetMaterialApp(
           localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,

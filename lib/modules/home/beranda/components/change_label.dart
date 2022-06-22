@@ -1,14 +1,14 @@
 part of 'beranda_components.dart';
 
-List<Widget> changeLabel = [
+List<Widget> changeLabel = const [
   ChangeLabelItem(
     text: 'Masuk',
   ),
   ChangeLabelItem(
-    text: 'Istirahat\nKeluar',
+    text: 'Istirahat',
   ),
   ChangeLabelItem(
-    text: 'Istirahat\nMasuk',
+    text: 'Kembali',
   ),
   ChangeLabelItem(
     text: 'Izin Keluar',
@@ -30,14 +30,10 @@ class ChangeLabelItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          text,
-          style: TextStyle(color: Colors.white, fontSize: 20),
-          textAlign: TextAlign.center,
-        ),
-      ],
+    return Text(
+      text,
+      style: TextStyle(color: Colors.white, fontSize: 20),
+      textAlign: TextAlign.center,
     );
   }
 }

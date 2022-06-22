@@ -6,6 +6,8 @@ class NotesInputField extends StatelessWidget {
   final String title;
   final String hint;
   final double? height;
+  final double? width;
+  final int? maxLines;
   final String? Function(String?)? validate;
 
   final TextEditingController? controller;
@@ -19,6 +21,8 @@ class NotesInputField extends StatelessWidget {
     this.controller,
     this.height,
     this.validate,
+    this.width,
+    this.maxLines,
   }) : super(key: key);
 
   @override
@@ -32,6 +36,7 @@ class NotesInputField extends StatelessWidget {
           margin: EdgeInsets.only(top: 8.0),
           padding: EdgeInsets.all(8.0),
           height: height,
+          width: width,
           decoration: BoxDecoration(
               border: Border.all(
                 color: Colors.grey,
@@ -43,6 +48,7 @@ class NotesInputField extends StatelessWidget {
             children: [
               Expanded(
                   child: TextFormField(
+                      maxLines: maxLines,
                       validator: validate,
                       readOnly: widget == null ? false : true,
                       autofocus: false,

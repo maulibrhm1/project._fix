@@ -44,14 +44,18 @@ dependencies:
     geolocator:
     get:
     flutter_rating_bar: ^4.0.0
+    firebase_core:
     table_calendar: ^3.0.5
     calendar_timeline:
     calendar_time:
+    cloud_firestore:
+    cupertino_icons:
     date_picker_timeline:
     date_range_picker:
     date_ranger:
     intl:
     sqflite:
+    query:
 
 dev_dependencies:
   flutter_test:

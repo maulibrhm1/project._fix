@@ -2,14 +2,25 @@
 
 part of "notes.dart";
 
-class AddKegiatanPage extends StatefulWidget {
-  const AddKegiatanPage({Key? key}) : super(key: key);
+class AddActivityPage extends StatefulWidget {
+  final ActivityModel? activity;
+  final bool addController;
+  final bool updateController;
+  final Function()? onUpdate;
+  const AddActivityPage({
+    Key? key,
+    this.onUpdate,
+    this.activity,
+    required this.addController,
+    required this.updateController,
+  }) : super(key: key);
 
   @override
-  State<AddKegiatanPage> createState() => _AddKegiatanPageState();
+  State<AddActivityPage> createState() => _UpdateActivityPage();
 }
 
-class _AddKegiatanPageState extends State<AddKegiatanPage> {
+class _UpdateActivityPage extends State<AddActivityPage> {
+  // final ActivityController _activityController = Get.put(ActivityController());
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _kegiatanController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
@@ -46,14 +57,14 @@ class _AddKegiatanPageState extends State<AddKegiatanPage> {
                     children: [
                       Text(
                         'Tambah Kegiatan',
-                        style: TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.w600),
+                        style: TextStyles(context).getTitleStyle(),
                       ),
                       NotesInputField(
-                        height: 150,
+                        width: size.width * 0.9,
                         title: 'Kegiatan',
                         hint: 'Masukan Kegiatan',
                         controller: _kegiatanController,
+                        maxLines: 8,
                       ),
                       SizedBox(height: 10),
                       ValidationText(
@@ -117,9 +128,9 @@ class _AddKegiatanPageState extends State<AddKegiatanPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           _colorPallette(),
-                          AddKegiatanButton(
+                          SaveButton(
                             label: 'Simpan',
-                            onTap: () => _validateDate(),
+                            onTap: () => _validateAdding(),
                           )
                         ],
                       ),
@@ -153,7 +164,7 @@ class _AddKegiatanPageState extends State<AddKegiatanPage> {
                 child: CircleAvatar(
                   radius: 14,
                   backgroundColor: index == 0
-                      ? AppTheme.mainColor
+                      ? AppTheme.primaryColor
                       : index == 1
                           ? Colors.amber
                           : Colors.grey,
@@ -173,28 +184,44 @@ class _AddKegiatanPageState extends State<AddKegiatanPage> {
     );
   }
 
-  _validateDate() {
+  _validateAdding() async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    CollectionReference activities = firestore.collection('activity');
+    DocumentSnapshot? snapshot;
     if (_kegiatanController.text.isNotEmpty) {
       setState(() {
         _visible = false;
-        Navigator.pop(context);
       });
+      if (widget.addController == true && widget.updateController == false) {
+        print(widget.addController && widget.updateController);
+        FirestoreService().addActivity(_kegiatanController.text, _selectedColor,
+            DateFormat.yMd().format(_selectedDate), _endTime, _startTime, 0);
+
+        // activities.add({
+        //   "activity": _kegiatanController.text,
+        //   "date": DateFormat.yMd().format(_selectedDate),
+        //   "startTime": _startTime,
+        //   "endTime": _endTime,
+        //   "color": _selectedColor,
+        //   "isCompleted": 0,
+        // });
+      } else {
+        await FirestoreService().updateActivity(
+            widget.activity!.id,
+            _kegiatanController.text,
+            _selectedColor,
+            DateFormat.yMd().format(_selectedDate),
+            _endTime,
+            _startTime,
+            0);
+      }
+
+      Get.back();
     } else if (_kegiatanController.text.isEmpty) {
       setState(() {
         _visible = true;
       });
     }
-  }
-
-  _addActivityToDb() {
-    Activity(
-      kegiatan: _kegiatanController.text,
-      date: DateFormat.yMd().format(_selectedDate),
-      startTime: _startTime,
-      endTime: _endTime,
-      color: _selectedColor,
-      isCompleted: 0,
-    );
   }
 
   _getDateFromUser() async {
@@ -236,20 +263,9 @@ class _AddKegiatanPageState extends State<AddKegiatanPage> {
             hour: int.parse(_startTime.split(":")[0]),
             minute: int.parse(_startTime.split(":")[1].split("")[0])));
   }
-}
 
-class AddKegiatanButton extends StatelessWidget {
-  final String label;
-  final Function()? onTap;
-  const AddKegiatanButton({
-    Key? key,
-    required this.label,
-    this.onTap,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
+  _saveButton(String text, Function()? onTap) {
+    GestureDetector(
         onTap: onTap,
         child: Container(
           margin: EdgeInsets.only(top: 14),
@@ -260,7 +276,7 @@ class AddKegiatanButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               color: AppTheme.mainColor),
           child: Text(
-            label,
+            text,
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),

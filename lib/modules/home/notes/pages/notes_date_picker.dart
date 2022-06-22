@@ -10,7 +10,12 @@ class NotesDatePicker extends StatefulWidget {
 }
 
 class _NotesDatePickerState extends State<NotesDatePicker> {
+  // final _activityController = Get.put(ActivityController());
+
+  final Stream<QuerySnapshot> _activityStream =
+      FirebaseFirestore.instance.collection("activity").snapshots();
   var dayPicker = DateFormat.EEEE().format(DateTime.now());
+  DateTime _selectedDay = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +29,13 @@ class _NotesDatePickerState extends State<NotesDatePicker> {
       ),
       body: Scaffold(
         body: Background(
-            child: ListView(
-          physics: BouncingScrollPhysics(),
-          children: [
-            Container(
-              padding: EdgeInsets.all(20),
-              margin: EdgeInsets.only(top: 20, bottom: 40),
-              child: Column(
+            child: Container(
+          padding: EdgeInsets.all(20),
+          margin: EdgeInsets.only(top: 20),
+          child: ListView(
+            physics: BouncingScrollPhysics(),
+            children: [
+              Column(
                 children: [
                   Row(
                     children: [
@@ -46,17 +51,19 @@ class _NotesDatePickerState extends State<NotesDatePicker> {
                       ),
                       Row(
                         children: [
-                          GestureDetector(
-                            onTap: (() =>
-                                Navigator.of(context).push((MaterialPageRoute(
-                                  builder: (context) => NotesDateTable(),
-                                )))),
-                            child: Icon(
-                              Icons.calendar_month,
-                              color: Colors.grey[300],
-                              size: 30,
-                            ),
-                          ),
+                          CupertinoButton(
+                              child: Icon(
+                                Icons.calendar_month,
+                                color: Colors.grey[300],
+                                size: 30,
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                        builder: (context) =>
+                                            NotesDateTable()));
+                              }),
                           GestureDetector(
                             onTap: null,
                             child: Icon(
@@ -64,6 +71,9 @@ class _NotesDatePickerState extends State<NotesDatePicker> {
                               color: AppTheme.mainColor,
                               size: 30,
                             ),
+                          ),
+                          SizedBox(
+                            width: 20,
                           )
                         ],
                       )
@@ -73,23 +83,76 @@ class _NotesDatePickerState extends State<NotesDatePicker> {
                     height: 30,
                   ),
                   DatePicker(
-                    DateTime.now(),
+                    DateTime(2022, DateTime.april),
                     height: 80,
                     width: 80,
                     initialSelectedDate: DateTime.now(),
+                    deactivatedColor: Colors.grey,
                     selectionColor: AppTheme.mainColor,
                     dateTextStyle: TextStyle(fontSize: 20),
+                    onDateChange: (date) {
+                      setState(() {
+                        _selectedDay = date;
+                      });
+                    },
                   )
                 ],
               ),
-            ),
-            AddKegiatanColumn()
-          ],
+              ShowActivity(),
+              AddActivity()
+            ],
+          ),
         )),
       ),
     );
   }
 
-  @override
-  bool get wantkeepAlive => true;
+  // _showActivity() {
+  //   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  //   CollectionReference activities = firestore.collection("activity");
+  //   return Container(
+  //     padding: EdgeInsets.symmetric(vertical: 20),
+  //     child: StreamBuilder<QuerySnapshot>(
+  //         stream: _activityStream,
+  //         builder: (_, snapshot) {
+  //           if (snapshot.hasError) {
+  //             print('data error');
+  //           }
+  //           if (snapshot.connectionState == ConnectionState.waiting) {
+  //             return Center(
+  //               child: CircularProgressIndicator(),
+  //             );
+  //           }
+  //           return Expanded(
+  //             child: CustomScrollView(
+  //               scrollDirection: Axis.vertical,
+  //               shrinkWrap: true,
+  //               slivers: [
+  //                 SliverList(
+  //                     delegate: SliverChildBuilderDelegate((_, index) {
+  //                   return snapshot.data!.docs[index]["date"] ==
+  //                           DateFormat.yMd().format(_selectedDay)
+  //                       ? ItemCard(
+  //                           date: snapshot.data!.docs[index]["date"],
+  //                           kegiatan: snapshot.data!.docs[index]["activity"],
+  //                           color: snapshot.data!.docs[index]["color"],
+  //                           startTime: snapshot.data!.docs[index]["startTime"],
+  //                           endTime: snapshot.data!.docs[index]["endTime"],
+  //                           onDelete: () {
+  //                             activities
+  //                                 .doc(snapshot.data!.docs[index].id)
+  //                                 .delete();
+  //                             setState(() {
+  //                               Get.back();
+  //                             });
+  //                           },
+  //                         )
+  //                       : Container();
+  //                 }, childCount: snapshot.data!.docs.length))
+  //               ],
+  //             ),
+  //           );
+  //         }),
+  //   );
+  // }
 }

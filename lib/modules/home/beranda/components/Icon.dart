@@ -10,7 +10,7 @@ class IconBeranda extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Icon(
         icon,
-        size: 60,
+        size: 50,
         color: AppTheme.mainColor,
       ),
     );

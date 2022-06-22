@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hotel_booking_ui/common/common.dart' as common;
 import 'package:flutter_hotel_booking_ui/providers/theme_provider.dart';
 import 'package:flutter_hotel_booking_ui/utils/enum.dart';
-import 'package:flutter_hotel_booking_ui/motel_app.dart';
+import 'package:flutter_hotel_booking_ui/magang_jogja_app.dart';
 import 'package:provider/provider.dart';
 
 class AppLocalizations {

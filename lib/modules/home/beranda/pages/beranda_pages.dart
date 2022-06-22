@@ -17,7 +17,7 @@ class _BerandaPageState extends State<BerandaPage> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   String dateNote = "Today";
-  int currentIndex = 0;
+  int timeIndex = 0;
   int colorIndex = 0;
   int labelIndex = 0;
   int navbarIndex = 0;
@@ -60,11 +60,13 @@ class _BerandaPageState extends State<BerandaPage> {
                       ),
                       InkWell(
                         onTap: () {
-                          getCurrentTime();
+                          _getCurrentTime();
                           _changeLabel();
-                          changeColor();
+                          _changeColor();
                         },
+                        borderRadius: BorderRadius.circular(100),
                         child: Container(
+                            margin: EdgeInsets.symmetric(horizontal: 14),
                             padding: EdgeInsets.all(40),
                             // ignore: prefer_const_literals_to_create_immutables
                             child: Column(children: [
@@ -98,73 +100,16 @@ class _BerandaPageState extends State<BerandaPage> {
                       ),
                       Column(
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.location_on,
-                                size: 20,
-                              ),
-                              Text("Position : $locationMessage")
-                            ],
-                          )
+                          SizedBox(
+                            height: 20,
+                          ),
+                          _location(),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          _output()
                         ],
                       ),
-                      SizedBox(
-                        height: 60,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Column(
-                            // ignore: prefer_const_literals_to_create_immutables
-                            children: [
-                              IconBeranda(icon: Icons.person),
-                              Text(
-                                WaktuMasuk,
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.w500),
-                              ),
-                              Text("Masuk")
-                            ],
-                          ),
-                          Column(
-                            // ignore: prefer_const_literals_to_create_immutables
-                            children: [
-                              IconBeranda(
-                                  icon: Icons.local_restaurant_outlined),
-                              Text(
-                                WaktuIstirahat,
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.w500),
-                              ),
-                              Text('Istirahat')
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              IconBeranda(icon: Icons.logout_sharp),
-                              Text(
-                                WaktuIzinKeluar,
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.w500),
-                              ),
-                              Text('Izin Keluar')
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              IconBeranda(icon: Icons.home),
-                              Text(
-                                WaktuPulang + 'Pulang',
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.w500),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        ],
-                      )
                     ],
                   ),
                 ),
@@ -176,7 +121,70 @@ class _BerandaPageState extends State<BerandaPage> {
     );
   }
 
-  getCurrentLocation() async {
+  _output() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Column(
+          // ignore: prefer_const_literals_to_create_immutables
+          children: [
+            IconBeranda(icon: Icons.person),
+            Text(
+              WaktuMasuk + "\nMasuk",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+        Column(
+          // ignore: prefer_const_literals_to_create_immutables
+          children: [
+            IconBeranda(icon: Icons.local_restaurant_outlined),
+            Text(
+              WaktuIstirahat + "\nIstirahat",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+        Column(
+          children: [
+            IconBeranda(icon: Icons.logout_sharp),
+            Text(
+              WaktuIzinKeluar + "\nIzin Keluar",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+        Column(
+          children: [
+            IconBeranda(icon: Icons.home),
+            Text(
+              WaktuPulang + '\nPulang',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  _location() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          Icons.location_on,
+          size: 20,
+        ),
+        Text("Position : $locationMessage")
+      ],
+    );
+  }
+
+  _getCurrentLocation() async {
     var position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     var lastPosition = await Geolocator.getLastKnownPosition();
@@ -188,31 +196,30 @@ class _BerandaPageState extends State<BerandaPage> {
     });
   }
 
-  changeColor() {
+  _changeColor() {
     setState(() {
-      if (i == 0 || i == 6) {
+      if (i < 0) {
+        colorIndex = 0;
+        i++;
+      } else if (i < 2) {
         colorIndex = 1;
         i++;
-        print(colorIndex);
-      } else if (i > 0 && i < 2) {
-        colorIndex = 1;
-        i++;
-        print(colorIndex);
       } else if (i < 4) {
         colorIndex = 2;
         i++;
-        print(colorIndex);
+      } else if (i > 4) {
+        colorIndex = 0;
+        i++;
       } else {
         colorIndex = 0;
-        i = 0;
-        print(colorIndex);
+        i = -1;
       }
     });
   }
 
   _changeLabel() {
     setState(() {
-      if (labelIndex < 6) {
+      if (labelIndex < 5) {
         labelIndex++;
       } else {
         labelIndex = 0;
@@ -220,23 +227,26 @@ class _BerandaPageState extends State<BerandaPage> {
     });
   }
 
-  getCurrentTime() async {
+  _getCurrentTime() async {
     setState(() {
-      if (currentIndex == 0) {
+      if (timeIndex == 0) {
         WaktuMasuk = DateFormat.Hm().format(DateTime.now());
-        currentIndex++;
-      } else if (currentIndex == 1) {
+        timeIndex++;
+      } else if (timeIndex == 1) {
         WaktuIstirahat = DateFormat.Hm().format(DateTime.now());
-        currentIndex++;
-      } else if (currentIndex == 2) {
+        timeIndex++;
+      } else if (timeIndex == 2) {
         WaktuIstirahat = DateFormat.Hm().format(DateTime.now());
-        currentIndex++;
-      } else if (currentIndex == 3) {
+        timeIndex++;
+      } else if (timeIndex == 3) {
         WaktuIzinKeluar = DateFormat.Hm().format(DateTime.now());
-        currentIndex++;
+        timeIndex++;
+      } else if (timeIndex == 4) {
+        WaktuIzinKeluar = DateFormat.Hm().format(DateTime.now());
+        timeIndex++;
       } else {
         WaktuPulang = DateFormat.Hm().format(DateTime.now());
-        currentIndex = 0;
+        timeIndex = -1;
       }
     });
   }
