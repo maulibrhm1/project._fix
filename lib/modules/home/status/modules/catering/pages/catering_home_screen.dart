@@ -27,7 +27,7 @@ class _CateringHomeScreenState extends State<CateringHomeScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(backgroundColor: Colors.tealAccent.shade700, actions: [
+      appBar: AppBar(backgroundColor: AppTheme.primaryColor, actions: [
         Container(
             margin: EdgeInsets.only(right: 14),
             child: menuButton(

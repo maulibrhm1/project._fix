@@ -23,6 +23,8 @@ class _UpdateActivityPage extends State<AddActivityPage> {
   // final ActivityController _activityController = Get.put(ActivityController());
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _kegiatanController = TextEditingController();
+  DocumentSnapshot? snapshot;
+
   DateTime _selectedDate = DateTime.now();
   String _startTime = DateFormat("hh:mm a").format(DateTime.now()).toString();
   String _endTime = "05:00 PM";
@@ -121,9 +123,7 @@ class _UpdateActivityPage extends State<AddActivityPage> {
                           )
                         ],
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
+                      SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -185,17 +185,19 @@ class _UpdateActivityPage extends State<AddActivityPage> {
   }
 
   _validateAdding() async {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-    CollectionReference activities = firestore.collection('activity');
-    DocumentSnapshot? snapshot;
     if (_kegiatanController.text.isNotEmpty) {
       setState(() {
         _visible = false;
       });
       if (widget.addController == true && widget.updateController == false) {
-        print(widget.addController && widget.updateController);
-        FirestoreService().addActivity(_kegiatanController.text, _selectedColor,
-            DateFormat.yMd().format(_selectedDate), _endTime, _startTime, 0);
+        FirestoreService().addActivity(
+          _kegiatanController.text,
+          _selectedColor,
+          DateFormat.yMd().format(_selectedDate),
+          _endTime,
+          _startTime,
+          0,
+        );
 
         // activities.add({
         //   "activity": _kegiatanController.text,

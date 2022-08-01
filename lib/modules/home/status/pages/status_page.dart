@@ -3,7 +3,9 @@
 part of 'status.dart';
 
 class StatusPage extends StatefulWidget {
-  const StatusPage({Key? key}) : super(key: key);
+  final authC = Get.find<AuthController>();
+
+  StatusPage({Key? key}) : super(key: key);
 
   @override
   State<StatusPage> createState() => _StatusPageState();
@@ -12,6 +14,8 @@ class StatusPage extends StatefulWidget {
 class _StatusPageState extends State<StatusPage> {
   late MenuListData menuCatering;
   late AnimationController animationController;
+
+  bool isRegistered = true;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -52,44 +56,67 @@ class _StatusPageState extends State<StatusPage> {
             "Prayogo",
             style: TextStyle(fontSize: 40, fontWeight: FontWeight.w300),
           ),
-          StatusMenu(
+          _statusMenu(
             icon: Icons.person_pin_rounded,
             text1: 'Bagian',
             text2: 'UI/UX Designer',
             press: () {},
           ),
-          StatusMenu(
+          _statusMenu(
             text1: 'Durasi',
             text2: '3 Bulan',
             icon: Icons.hourglass_bottom_rounded,
             press: () {},
           ),
-          StatusMenu(
+          _statusMenu(
             text1: 'Waktu yang tersisa',
             text2: '2 Bulan 7 Hari',
             icon: Icons.timer_outlined,
             press: () {},
           ),
-          StatusMenu(
+          _statusMenu(
             text1: 'Catering',
             text2: 'Menu makanan',
             icon: Icons.restaurant_menu_rounded,
             press: () {
-              NavigationServices(context).gotoCateringHomeScreen();
+              Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                      builder: (context) => CateringHomeScreen()));
             },
           ),
-          StatusMenu(
+          _statusMenu(
             text1: 'Kosan',
             text2: 'Menu Kosan',
             icon: Icons.house,
             press: () {
-              NavigationServices(context).gotoHotelKosanPage();
+              Navigator.push(context,
+                  CupertinoPageRoute(builder: (context) => KosanPage()));
             },
           ),
-          StatusMenu(
+          _statusMenu(
             text1: 'Laundry',
             text2: 'Nyuci tidak perlu cape',
             icon: Icons.add_business_rounded,
+            press: () {
+              Navigator.push(context,
+                  CupertinoPageRoute(builder: (context) => LaundryMain()));
+            },
+          ),
+          _statusMenu(
+            text1: 'Galon',
+            text2: 'Gak ada waktu buat beli galon?\nsini kami bantu',
+            icon: Icons.water,
+            press: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return Container();
+              }));
+            },
+          ),
+          _statusMenu(
+            text1: 'Gas',
+            text2: 'Gak ada waktu buat beli gas?\nsini kami bantu',
+            icon: Icons.assured_workload,
             press: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return Container();
@@ -97,9 +124,9 @@ class _StatusPageState extends State<StatusPage> {
             },
           ),
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            padding: EdgeInsets.symmetric(vertical: 24),
             child: TextButton(
-              onPressed: () {},
+              onPressed: () => widget.authC.signout(),
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 2.0, horizontal: 10),
@@ -132,9 +159,52 @@ class _StatusPageState extends State<StatusPage> {
     );
   }
 
+  _statusMenu(
+      {String? text1, String? text2, IconData? icon, Function()? press}) {
+    return InkWell(
+      onTap: press,
+      child: Row(
+        children: [
+          Container(
+            margin: EdgeInsets.all(10),
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50),
+              color: Color.fromARGB(80, 40, 175, 112),
+            ),
+            child: Icon(
+              icon,
+              color: Color.fromARGB(255, 40, 175, 112),
+              size: 30,
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            // ignore: prefer_const_literals_to_create_immutables
+            children: [
+              Text(
+                text1!,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.start,
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.5,
+                child: Text(
+                  text2!,
+                  textAlign: TextAlign.start,
+                ),
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
   _profileWidget(User user, BuildContext context, Color color) {
     return Container(
       margin: EdgeInsets.only(top: 30),
+      width: MediaQuery.of(context).size.width * 0.9,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -179,7 +249,7 @@ class _StatusPageState extends State<StatusPage> {
                   right: 0,
                   child: InkWell(
                       child: GestureDetector(
-                    onTap: () => NavigationServices(context).gotoTopupPage(),
+                    onTap: () => Get.to(() => TopupPage()),
                     child: buildAddIcon(color),
                   )))
             ],
@@ -205,53 +275,4 @@ class _StatusPageState extends State<StatusPage> {
           child: child,
         ),
       );
-}
-
-class StatusMenu extends StatelessWidget {
-  final String text1;
-  final String text2;
-  final IconData icon;
-  final Function() press;
-  const StatusMenu({
-    Key? key,
-    required this.text1,
-    required this.text2,
-    required this.icon,
-    required this.press,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: press,
-      child: Row(
-        children: [
-          Container(
-            margin: EdgeInsets.all(10),
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50),
-              color: Color.fromARGB(80, 40, 175, 112),
-            ),
-            child: Icon(
-              icon,
-              color: Color.fromARGB(255, 40, 175, 112),
-              size: 30,
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            // ignore: prefer_const_literals_to_create_immutables
-            children: [
-              Text(
-                text1,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              Text(text2)
-            ],
-          )
-        ],
-      ),
-    );
-  }
 }

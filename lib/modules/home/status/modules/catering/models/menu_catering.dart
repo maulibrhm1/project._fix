@@ -74,16 +74,3 @@ class CheckoutListData {
     ),
   ];
 }
-
-
-// class MenuCatering = {
-//   String labelMenu;
-//   String itemMenu;
-
-//   MenuCatering({
-//     this.labelMenu = '';
-//     this.itemMenu = '';
-//   });
-
-//   static List<MenuCatering> menuCatering = []
-// }

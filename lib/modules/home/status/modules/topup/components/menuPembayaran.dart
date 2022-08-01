@@ -1,9 +1,9 @@
 part of 'topup_components.dart';
 
-class menuPembayaran extends StatelessWidget {
+class MenuPembayaran extends StatelessWidget {
   final Image image;
   final Function onTap;
-  const menuPembayaran({
+  const MenuPembayaran({
     Key? key,
     required this.onTap,
     required this.image,

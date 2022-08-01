@@ -16,7 +16,7 @@ class menuTopup extends StatelessWidget {
         onTap();
       },
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 30, horizontal: 52),
+        padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 52),
         child: Text(text),
         decoration: BoxDecoration(
             border: Border.all(width: 2.0, color: Colors.grey.shade300)),

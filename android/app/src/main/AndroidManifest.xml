@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.flutter_hotel_booking_ui">
+    package="com.project.magang_jogja">
    <application
         android:label="flutter_hotel_booking_ui"
         android:name="${applicationName}"

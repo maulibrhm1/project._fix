@@ -10,16 +10,21 @@ class AbsensiMain extends StatefulWidget {
 }
 
 class _AbsensiMainState extends State<AbsensiMain> {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final Stream<QuerySnapshot> jamKerja = FirebaseFirestore.instance
+      .collection("user")
+      .doc(FirebaseAuth.instance.currentUser!.uid)
+      .collection("attendance")
+      .snapshots();
   DateTime _selectedDate = DateTime.now();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Container(child: Text('Catatan Kegiatan')),
+        title: Text('Absensi'),
         centerTitle: true,
         backgroundColor: Colors.tealAccent[700],
-        // ignore: prefer_const_literals_to_create_immutables
       ),
       body: Background(
           child: SizedBox(
@@ -27,7 +32,6 @@ class _AbsensiMainState extends State<AbsensiMain> {
         width: size.width,
         child: ListView(children: [
           Column(
-            // ignore: prefer_const_literals_to_create_immutables
             children: [
               Container(
                   padding: EdgeInsets.all(20),
@@ -38,77 +42,115 @@ class _AbsensiMainState extends State<AbsensiMain> {
                         activeBackgroundDayColor: AppTheme.primaryColor,
                         dayColor: AppTheme.primaryColor,
                         dotsColor: AppTheme.primaryColor,
-                        initialDate: DateTime.now(),
+                        initialDate: _selectedDate,
                         firstDate: DateTime(2022, 1, 1),
                         lastDate: DateTime(2022, 12, 31),
                         onDateSelected: (date) {
-                          print(date);
+                          setState(() {
+                            _selectedDate = date!;
+                            print(_selectedDate);
+                          });
                         },
                       ),
                     ],
                   )),
-              Table(
-                  border: TableBorder.all(color: Colors.grey.shade400),
-                  columnWidths: {
-                    0: FractionColumnWidth(.2),
-                    1: FractionColumnWidth(.25),
-                    2: FractionColumnWidth(.16),
-                    3: FractionColumnWidth(.19),
-                    4: FractionColumnWidth(.2)
-                  },
-                  children: [
-                    TableRow(
-                        decoration: BoxDecoration(color: Colors.grey[300]),
-                        children: [
-                          itemAbsensi(
-                            text: 'Masuk',
-                          ),
-                          itemAbsensi(
-                            text: 'Istirahat',
-                          ),
-                          itemAbsensi(
-                            text: 'Izin',
-                          ),
-                          itemAbsensi(
-                            text: 'Pulang',
-                          ),
-                          itemAbsensi(
-                            text: 'Total',
-                          ),
-                        ]),
-                    TableRow(children: [
-                      itemAbsensi(text: '06.26'),
-                      itemAbsensi(text: '0 menit'),
-                      itemAbsensi(text: '0 menit'),
-                      itemAbsensi(text: '13.00'),
-                      itemAbsensi(text: '7 jam 26 Menit'),
-                    ])
-                  ]),
-              Table(children: [])
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: StreamBuilder<QuerySnapshot>(
+                    stream: jamKerja,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return Text("something went wrong");
+                      }
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Text("Loading...");
+                      }
+                      final data = snapshot.requireData;
+                      return ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: data.size,
+                          itemBuilder: (_, index) {
+                            return snapshot.data!.docs[index]["date"] ==
+                                    DateFormat.yMd().format(_selectedDate)
+                                ? Table(
+                                    border: TableBorder.all(
+                                        color: Colors.grey.shade400, width: 1),
+                                    defaultVerticalAlignment:
+                                        TableCellVerticalAlignment.middle,
+                                    columnWidths: {
+                                        0: FractionColumnWidth(.1),
+                                        1: FractionColumnWidth(.4),
+                                      },
+                                    children: [
+                                        buildRow([
+                                          'Masuk',
+                                          '${snapshot.data!.docs[index]["masuk"]} WIB'
+                                        ]),
+                                        buildRow([
+                                          'Istirahat',
+                                          '${snapshot.data!.docs[index]["waktu_istirahat"]}'
+                                        ]),
+                                        buildRow([
+                                          'Izin',
+                                          '${snapshot.data!.docs[index]["waktu_izin"]}'
+                                        ]),
+                                        buildRow([
+                                          "Pulang",
+                                          '${snapshot.data!.docs[index]["pulang"]} WIB'
+                                        ]),
+                                        buildRow([
+                                          'Total',
+                                          '${snapshot.data!.docs[index]["total"]}'
+                                        ]),
+                                      ])
+                                : Column(children: [
+                                    Text("Data anda tidak ada"),
+                                  ]);
+                          });
+                    }),
+              ),
             ],
           )
         ]),
       )),
     );
   }
-}
 
-class itemAbsensi extends StatelessWidget {
-  final String text;
-  const itemAbsensi({
-    Key? key,
-    required this.text,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Center(
-          child: Text(
-        text,
-        style: TextStyle(fontSize: 16),
-      )),
-    );
+  Future<AttendanceModel?> readAttendance() async {
+    final docAttendance =
+        firestore.collection("attendance").doc("knw9C9tk64NjKost57GF");
+    final snapshot = await docAttendance.get();
+    if (snapshot.exists) {
+      return AttendanceModel.fromJson(snapshot.data()!);
+    }
+    return null;
   }
+
+  _tableAttendance(AttendanceModel attendanceModel) {
+    return Table(
+        border: TableBorder.all(color: Colors.grey.shade400, width: 1),
+        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+        columnWidths: {
+          0: FractionColumnWidth(.3),
+          1: FractionColumnWidth(.4),
+        },
+        children: [
+          buildRow(['Masuk', '${attendanceModel.masuk} WIB']),
+          buildRow(['Istirahat', '${attendanceModel.waktuIstirahat}']),
+          buildRow(['Izin', '${attendanceModel.waktuIzin}']),
+          buildRow(["Pulang", '${attendanceModel.pulang} WIB']),
+          buildRow(['Total', '${attendanceModel.waktuTotal}']),
+        ]);
+  }
+
+  TableRow buildRow(List<String> cells) => TableRow(
+      children: cells
+          .map((cells) => Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  cells,
+                  style: TextStyles(context).getRegularStyle(),
+                ),
+              ))
+          .toList());
 }

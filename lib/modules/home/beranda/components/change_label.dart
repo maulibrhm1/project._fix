@@ -32,7 +32,9 @@ class ChangeLabelItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: TextStyle(color: Colors.white, fontSize: 20),
+      style: TextStyles(context)
+          .getRegularStyle()
+          .copyWith(fontSize: 24, color: Colors.black),
       textAlign: TextAlign.center,
     );
   }

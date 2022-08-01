@@ -17,8 +17,15 @@ void main() async {
       .then((_) => runApp(_setAllProviders()));
 }
 
-Widget _setAllProviders() {
-  return MultiProvider(
+_setAllProviders() {
+  return
+      // GetMaterialApp(
+      //   navigatorKey: navigatorKey,
+      //   title: "MagangJogja App",
+      //   home: MainPage(),
+      // );
+
+      MultiProvider(
     providers: [
       ChangeNotifierProvider(
         create: (_) => ThemeProvider(

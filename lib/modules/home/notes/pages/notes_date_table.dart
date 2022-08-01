@@ -10,11 +10,15 @@ class NotesDateTable extends StatefulWidget {
 }
 
 class _NotesDateTableState extends State<NotesDateTable> {
+  final authC = Get.put(AuthController(), permanent: true);
   // final _activityController = Get.put(ActivityController());
   final Stream<QuerySnapshot> _activityStream = FirebaseFirestore.instance
+      .collection("user")
+      .doc(FirebaseAuth.instance.currentUser!.uid)
       .collection("activity")
-      .orderBy("startTime")
       .snapshots();
+  CollectionReference activities = firestore.collection("activity");
+
   bool _visible = false;
   CalendarFormat _format = CalendarFormat.month;
   DateTime _selectedDay = DateTime.now();
@@ -39,14 +43,8 @@ class _NotesDateTableState extends State<NotesDateTable> {
                 child: Column(
                   children: [
                     _calendarTable(context, size),
-                    Container(
-                      margin: EdgeInsets.only(top: 20, bottom: 20),
-                      child: Text(
-                        DateFormat.EEEE().format(DateTime.now()),
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    ),
-                    ShowActivity(),
+                    _dailyActivityTitle(),
+                    _showActivity(),
                     AddActivity(),
                   ],
                 ),
@@ -56,90 +54,66 @@ class _NotesDateTableState extends State<NotesDateTable> {
         ));
   }
 
-  // _showActivity() {
-  //   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  //   CollectionReference activities = firestore.collection("activity");
-  //   Size size = MediaQuery.of(context).size;
-  //   return Container(
-  //     padding: EdgeInsets.symmetric(vertical: 20),
-  //     child: StreamBuilder<QuerySnapshot>(
-  //         stream: _activityStream,
-  //         builder: (_, snapshot) {
-  //           if (snapshot.hasError) {
-  //             print('data error');
-  //           }
-  //           if (snapshot.connectionState == ConnectionState.waiting) {
-  //             return Center(
-  //               child: CircularProgressIndicator(),
-  //             );
-  //           }
+  _dailyActivityTitle() {
+    return Container(
+      margin: EdgeInsets.only(top: 20, bottom: 20),
+      child: Text(
+        DateFormat.EEEE().format(DateTime.now()),
+        style: TextStyle(fontSize: 20),
+      ),
+    );
+  }
 
-  //           return Expanded(
-  //             child: CustomScrollView(
-  //               scrollDirection: Axis.vertical,
-  //               shrinkWrap: true,
-  //               slivers: [
-  //                 SliverList(
-  //                     delegate: SliverChildBuilderDelegate((_, index) {
-  //                   return snapshot.data!.docs[index]["date"] ==
-  //                           DateFormat.yMd().format(_selectedDay)
-  //                       ? ItemCard(
-  //                           date: snapshot.data!.docs[index]["date"],
-  //                           kegiatan: snapshot.data!.docs[index]["activity"],
-  //                           color: snapshot.data!.docs[index]["color"],
-  //                           startTime: snapshot.data!.docs[index]["startTime"],
-  //                           endTime: snapshot.data!.docs[index]["endTime"],
-  //                           onDelete: () {
-  //                             print(
-  //                                 "Deleting field ${snapshot.data!.docs[index].id}");
-  //                             activities
-  //                                 .doc(snapshot.data!.docs[index].id)
-  //                                 .delete();
-  //                             setState(() {
-  //                               Get.back();
-  //                             });
-  //                           },
-  //                           onUpdate: () {
-  //                             print(
-  //                                 "Updating field ${snapshot.data!.docs[index].id}");
-  //                             activities
-  //                                 .doc(snapshot.data!.docs[index].id)
-  //                                 .update({
-  //                               "activity": _kegiatanController.text,
-  //                               "date": DateFormat.yMd().format(_selectedDate),
-  //                               "startTime": _startTime,
-  //                               "endTime": _endTime,
-  //                               "color": _selectedColor,
-  //                               "isCompleted": 0,
-  //                             });
-  //                           },
-  //                         )
-  //                       : Container();
-  //                 }, childCount: snapshot.data!.docs.length))
-  //               ],
-  //             ),
-  //           );
-  //         }),
-  //   );
-  // }
+  _showActivity() {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 20),
+      child: StreamBuilder<QuerySnapshot>(
+          stream: _activityStream,
+          builder: (_, snapshot) {
+            if (snapshot.hasError) {
+              print('data error');
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
 
-  // _addActivity() {
-  //   return NotesButton(
-  //     touch: () async {
-  //       setState(() {
-  //         _addController = true;
-  //         _updateController = false;
-  //       });
-  //       await Get.to(const AddActivityPage(
-  //         addController: true,
-  //         updateController: false,
-  //       ));
-  //     },
-  //     icon: Icons.add,
-  //     label: '',
-  //     width: 30,
-  //   );
-  // }
+            return CustomScrollView(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              slivers: [
+                SliverList(
+                    delegate: SliverChildBuilderDelegate((_, index) {
+                  ActivityModel activityModel =
+                      ActivityModel.fromJson(snapshot.data!.docs[index]);
+                  return snapshot.data!.docs[index]["date"] ==
+                          DateFormat.yMd().format(_selectedDay)
+                      ? ItemCard(
+                          activityModel,
+                          date: snapshot.data!.docs[index]["date"],
+                          kegiatan: snapshot.data!.docs[index]["activity"],
+                          color: snapshot.data!.docs[index]["color"],
+                          startTime: snapshot.data!.docs[index]["startTime"],
+                          endTime: snapshot.data!.docs[index]["endTime"],
+                          onDelete: () {
+                            print(
+                                "Deleting field ${snapshot.data!.docs[index].id}");
+                            activities
+                                .doc(snapshot.data!.docs[index].id)
+                                .delete();
+                            setState(() {
+                              Get.back();
+                            });
+                          },
+                        )
+                      : Container();
+                }, childCount: snapshot.data!.docs.length))
+              ],
+            );
+          }),
+    );
+  }
 
   _calendarTable(BuildContext context, Size size) {
     return Column(

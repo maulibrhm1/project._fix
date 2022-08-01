@@ -4,11 +4,18 @@ import 'package:flutter_hotel_booking_ui/utils/themes.dart';
 
 class CommonTextFieldView extends StatelessWidget {
   final String? titleText;
-  final String hintText;
+  final String? hintText;
+  final String? validator;
+  final double? width;
+  final IconData? iconShow;
+  final IconData? iconHide;
   final String? errorText;
+  final Widget? widget;
+  final Color? color;
   final bool isObscureText, isAllowTopTitleView;
   final EdgeInsetsGeometry padding;
   final Function(String)? onChanged;
+  final Function()? onTap;
   final TextInputType keyboardType;
   final TextEditingController? controller;
 
@@ -23,10 +30,21 @@ class CommonTextFieldView extends StatelessWidget {
     this.errorText,
     this.titleText = '',
     this.controller,
+    this.iconShow,
+    this.iconHide,
+    this.onTap,
+    this.widget,
+    this.validator,
+    this.color,
+    this.width,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    bool emailField = false;
+
+    bool _obscureText = true;
+    bool passwordField = false;
     Size size = MediaQuery.of(context).size;
     return Padding(
       padding: padding,
@@ -34,12 +52,14 @@ class CommonTextFieldView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (isAllowTopTitleView && titleText != '')
-            Padding(
+            Container(
+              width: size.width * 0.6,
               padding:
                   const EdgeInsets.only(left: 16, right: 16, top: 4, bottom: 4),
               child: Text(
                 titleText ?? "",
-                style: TextStyles(context).getDescriptionStyle(),
+                style: TextStyles(context).getRegularStyle(),
+                maxLines: 5,
               ),
             ),
           Card(
@@ -49,13 +69,14 @@ class CommonTextFieldView extends StatelessWidget {
             shadowColor: Colors.black12.withOpacity(
               Theme.of(context).brightness == Brightness.dark ? 0.6 : 0.2,
             ),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16),
+            child: Container(
+              color: color,
+              padding: const EdgeInsets.only(left: 16),
               child: SizedBox(
                 height: 48,
-                width: size.width * 0.6,
+                width: width ?? size.width * 0.64,
                 child: Center(
-                  child: TextField(
+                  child: TextFormField(
                     controller: controller,
                     maxLines: 1,
                     onChanged: onChanged,
@@ -66,6 +87,7 @@ class CommonTextFieldView extends StatelessWidget {
                       FocusScope.of(context).nextFocus();
                     },
                     decoration: InputDecoration(
+                      suffixIcon: widget,
                       errorText: null,
                       border: InputBorder.none,
                       hintText: hintText,
@@ -79,14 +101,14 @@ class CommonTextFieldView extends StatelessWidget {
             ),
           ),
           if (errorText != null && errorText != '')
-            Padding(
-              padding:
-                  const EdgeInsets.only(left: 16, right: 16, top: 4, bottom: 4),
+            Container(
+              width: size.width * 0.66,
+              padding: const EdgeInsets.only(left: 16, right: 16, top: 12),
               child: Text(
                 errorText ?? "",
-                style: TextStyles(context).getDescriptionStyle().copyWith(
-                      color: AppTheme.redErrorColor,
-                    ),
+                style: TextStyles(context)
+                    .getDescriptionStyle()
+                    .copyWith(color: AppTheme.redErrorColor, fontSize: 12),
               ),
             )
         ],

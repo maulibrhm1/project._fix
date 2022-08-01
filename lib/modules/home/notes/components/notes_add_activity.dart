@@ -15,7 +15,7 @@ class _AddActivityState extends State<AddActivity> {
     return NotesButton(
       touch: () async {
         setState(() {});
-        await Get.to(AddActivityPage(
+        await Get.to(const AddActivityPage(
           addController: true,
           updateController: false,
         ));

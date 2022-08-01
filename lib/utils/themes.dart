@@ -22,7 +22,7 @@ class AppTheme {
   }
 
   static Color get scaffoldBackgroundColor =>
-      isLightMode ? Color(0xFFF7F7F7) : Color(0xFF1A1A1A);
+      isLightMode ? Color.fromARGB(255, 255, 255, 255) : Color(0xFF1A1A1A);
 
   static Color get redErrorColor =>
       isLightMode ? Color(0xFFAC0000) : Color(0xFFAC0000);

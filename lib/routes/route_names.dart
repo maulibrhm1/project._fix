@@ -8,8 +8,7 @@ import 'package:flutter_hotel_booking_ui/modules/hotel_booking/filter_screen/fil
 import 'package:flutter_hotel_booking_ui/modules/hotel_booking/hotel_home_screen.dart';
 import 'package:flutter_hotel_booking_ui/modules/hotel_detailes/room_booking_screen.dart';
 import 'package:flutter_hotel_booking_ui/modules/hotel_detailes/search_screen.dart';
-import 'package:flutter_hotel_booking_ui/modules/login/forgot_password.dart';
-import 'package:flutter_hotel_booking_ui/modules/login/auth.dart';
+import 'package:flutter_hotel_booking_ui/modules/login/pages/auth.dart';
 import 'package:flutter_hotel_booking_ui/routes/routes.dart';
 
 class NavigationServices {
@@ -28,11 +27,11 @@ class NavigationServices {
 
   void gotoSplashScreen() {
     Navigator.pushNamedAndRemoveUntil(
-        context, RoutesName.Splash, (Route<dynamic> route) => false);
+        context, RoutesName.splash, (Route<dynamic> route) => false);
   }
 
   void gotoIntroductionScreen() {
-    Navigator.pushNamedAndRemoveUntil(context, RoutesName.IntroductionScreen,
+    Navigator.pushNamedAndRemoveUntil(context, RoutesName.introductionscreen,
         (Route<dynamic> route) => false);
   }
 
@@ -47,7 +46,9 @@ class NavigationServices {
   }
 
   Future<dynamic> gotoTabScreen() async {
-    return await _pushMaterialPageRoute(BottomTabScreen());
+    return await _pushMaterialPageRoute(BottomTabScreen(
+      registered: false,
+    ));
   }
 
   Future<dynamic> gotoSignupScreen() async {

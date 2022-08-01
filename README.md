@@ -1,4 +1,4 @@
-# Flutter_hotel_booking_ui
+# flutter_hotel_booking_ui
 
 In this video, I'm going to show you how to make a Cool Hotel Booking App using Flutter from scratch.
 

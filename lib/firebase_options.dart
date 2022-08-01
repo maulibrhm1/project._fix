@@ -47,29 +47,29 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyC03Bx6Hvxc04Hr_ENFcw65X_vUDzZAL9w',
-    appId: '1:775433022639:web:c3b535bcbd810b60fe785a',
-    messagingSenderId: '775433022639',
-    projectId: 'projectexample-85877',
-    authDomain: 'projectexample-85877.firebaseapp.com',
-    storageBucket: 'projectexample-85877.appspot.com',
+    apiKey: 'AIzaSyAabye8hWU4TmPPYpMHb8qPsJ8B4RQQpWc',
+    appId: '1:611382992367:web:6a33d33e674dbb123d6a1a',
+    messagingSenderId: '611382992367',
+    projectId: 'project-magang-e4f19',
+    authDomain: 'project-magang-e4f19.firebaseapp.com',
+    storageBucket: 'project-magang-e4f19.appspot.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDAGCCfr1m7WoN7Syc0nHohVoFC1xWsZv0',
-    appId: '1:775433022639:android:156dddee49c9b460fe785a',
-    messagingSenderId: '775433022639',
-    projectId: 'projectexample-85877',
-    storageBucket: 'projectexample-85877.appspot.com',
+    apiKey: 'AIzaSyAv9CuEVkENyuOj8NmroyJtAoBmejm5h5o',
+    appId: '1:611382992367:android:978febc52bc667683d6a1a',
+    messagingSenderId: '611382992367',
+    projectId: 'project-magang-e4f19',
+    storageBucket: 'project-magang-e4f19.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDNVNGnB-l11SaqbYaQwPhG_H0irG4-i1A',
-    appId: '1:775433022639:ios:9b4df729a6633276fe785a',
-    messagingSenderId: '775433022639',
-    projectId: 'projectexample-85877',
-    storageBucket: 'projectexample-85877.appspot.com',
-    iosClientId: '775433022639-qitjj3a2r29684qrgda43dkneuqjpmli.apps.googleusercontent.com',
+    apiKey: 'AIzaSyCimKXYtyxWKdht0cBbtnKiId93wlnEsdI',
+    appId: '1:611382992367:ios:8868191c71f172ec3d6a1a',
+    messagingSenderId: '611382992367',
+    projectId: 'project-magang-e4f19',
+    storageBucket: 'project-magang-e4f19.appspot.com',
+    iosClientId: '611382992367-p45tgt7viuhuf3cqmnnopi5nbvkdqpr8.apps.googleusercontent.com',
     iosBundleId: 'com.example.flutterHotelBookingUi',
   );
 }

@@ -1,7 +1,11 @@
+// import 'dart:html';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hotel_booking_ui/controller/auth_controller.dart';
 import 'package:flutter_hotel_booking_ui/models/activity.dart';
 import 'package:flutter_hotel_booking_ui/modules/home/notes/components/notes_components.dart';
 import 'package:flutter_hotel_booking_ui/services/firestore_services.dart';

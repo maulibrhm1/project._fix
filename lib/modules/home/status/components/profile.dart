@@ -17,7 +17,7 @@ class ProfileWidget extends StatelessWidget {
         padding: EdgeInsets.fromLTRB(0, 40, 0, 24),
         child: Stack(children: [
           buildImage(),
-          Positioned(bottom: 0, right: 4, child: buildAddIcon(color))
+          Positioned(bottom: 0, right: 0, child: buildAddIcon(color))
         ]),
       ),
     );
@@ -27,13 +27,12 @@ class ProfileWidget extends StatelessWidget {
     final image = AssetImage(imagePath);
     return ClipOval(
       child: Material(
-        color: Colors.transparent,
+        color: Colors.grey,
         child: Ink.image(
           image: image,
           fit: BoxFit.cover,
-          width: 120,
-          height: 120,
-          child: InkWell(onTap: onClicked),
+          width: 135,
+          height: 135,
         ),
       ),
     );
@@ -41,7 +40,7 @@ class ProfileWidget extends StatelessWidget {
 
   buildAddIcon(Color color) => buildCircle(
         color: Colors.tealAccent.shade700,
-        all: 0,
+        all: 2,
         child: Icon(
           Icons.add,
           size: 30,
@@ -51,11 +50,18 @@ class ProfileWidget extends StatelessWidget {
 
   buildCircle(
           {required Widget child, required double all, required Color color}) =>
-      ClipOval(
+      InkWell(
+        borderRadius: BorderRadius.circular(34),
+        onTap: () {},
         child: Container(
-          padding: EdgeInsets.all(all),
-          color: color,
-          child: child,
+          padding: const EdgeInsets.all(4),
+          child: ClipOval(
+            child: Container(
+              padding: EdgeInsets.all(all),
+              color: color,
+              child: child,
+            ),
+          ),
         ),
       );
 }

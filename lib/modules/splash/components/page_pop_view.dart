@@ -30,7 +30,7 @@ class PagePopup extends StatelessWidget {
           flex: 1,
           child: Container(
             child: Text(
-              AppLocalizations(context).of(imageData.titleText),
+              imageData.titleText,
               textAlign: TextAlign.center,
               style: TextStyles(context).getTitleStyle().copyWith(
                     fontSize: 24,
@@ -42,14 +42,15 @@ class PagePopup extends StatelessWidget {
         Expanded(
           flex: 1,
           child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Text(
-              AppLocalizations(context).of(imageData.subText),
+              imageData.subText,
               textAlign: TextAlign.center,
               style: TextStyles(context).getDescriptionStyle(),
             ),
           ),
         ),
-        Expanded(
+        const Expanded(
           flex: 1,
           child: SizedBox(),
         ),

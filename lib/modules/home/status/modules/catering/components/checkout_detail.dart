@@ -45,15 +45,15 @@ class _CheckoutDetailState extends State<CheckoutDetail> {
               _checkoutData!.menuDays, TextType.day),
           _checkoutDetail('Jumlah:', 'Rp. 20.000,-', false, true,
               _checkoutData!.amountPrice, TextType.am),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           _datePicker(context),
           _paymentMethod(context),
           Row(
-            children: [Text('Notes:')],
+            children: const [Text('Notes:')],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Container(
@@ -88,15 +88,15 @@ class _CheckoutDetailState extends State<CheckoutDetail> {
         ),
         Container(
           height: 40,
-          margin: EdgeInsets.symmetric(vertical: 10),
-          padding: EdgeInsets.all(8),
+          margin: const EdgeInsets.symmetric(vertical: 10),
+          padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
               color: Colors.white, borderRadius: BorderRadius.circular(10)),
           child: DropdownButton(
-            underline: SizedBox(),
-            hint: Text('Pilih'),
+            underline: const SizedBox(),
+            hint: const Text('Pilih'),
             value: selected,
-            icon: Icon(Icons.keyboard_arrow_down),
+            icon: const Icon(Icons.keyboard_arrow_down),
             dropdownColor: Colors.grey[200],
             onChanged: (value) {
               setState(() {
@@ -158,10 +158,10 @@ class _CheckoutDetailState extends State<CheckoutDetail> {
           s1,
           style: TextStyles(context).getRegularStyle().copyWith(fontSize: 16),
         ),
-        SizedBox(
+        const SizedBox(
           height: 30,
         ),
-        Container(
+        SizedBox(
           width: size.width * 0.3,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

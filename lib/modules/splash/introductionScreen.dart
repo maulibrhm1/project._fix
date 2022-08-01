@@ -1,6 +1,8 @@
 part of 'splash.dart';
 
 class IntroductionScreen extends StatefulWidget {
+  const IntroductionScreen({Key? key}) : super(key: key);
+
   @override
   _IntroductionScreenState createState() => _IntroductionScreenState();
 }
@@ -15,33 +17,27 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
   @override
   void initState() {
     pageViewModelData.add(PageViewData(
-      titleText: 'plan_your_trips',
-      subText: 'book_one_of_your',
+      titleText: 'Seven Inc.',
+      subText:
+          'Seven Inc membuka kesempatan buat Kamu yang ingin menjajal pengalaman kerja di bisnis yang dijalankan Seven Inc',
       assetsImage: Localfiles.introduction1,
     ));
 
     pageViewModelData.add(PageViewData(
-      titleText: 'find_best_deals',
-      subText: 'find_deals_for_any',
+      titleText: 'Magangjogja.com',
+      subText:
+          'Kamu siswa smk atau mahasiswa? Cari tempat PKL, Magang, PRAKERIN, OJT, atau Praktik Kerja?'
+          'Ayo gabung bersama kami!',
       assetsImage: Localfiles.introduction2,
     ));
 
-    pageViewModelData.add(PageViewData(
-      titleText: 'best_travelling_all_time',
-      subText: 'find_deals_for_any',
-      assetsImage: Localfiles.introduction3,
-    ));
-
-    sliderTimer = Timer.periodic(Duration(seconds: 4), (timer) {
+    sliderTimer = Timer.periodic(const Duration(seconds: 4), (timer) {
       if (currentShowIndex == 0) {
         pageController.animateTo(MediaQuery.of(context).size.width,
-            duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+            duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
       } else if (currentShowIndex == 1) {
-        pageController.animateTo(MediaQuery.of(context).size.width * 2,
-            duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn);
-      } else if (currentShowIndex == 2) {
         pageController.animateTo(0,
-            duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+            duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
       }
     });
     super.initState();
@@ -72,27 +68,25 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
               children: <Widget>[
                 PagePopup(imageData: pageViewModelData[0]),
                 PagePopup(imageData: pageViewModelData[1]),
-                PagePopup(imageData: pageViewModelData[2]),
               ],
             ),
           ),
           SmoothPageIndicator(
             controller: pageController, // PageController
-            count: 3,
+            count: 2,
             effect: WormEffect(
                 activeDotColor: Theme.of(context).primaryColor,
                 dotColor: Theme.of(context).dividerColor,
                 dotHeight: 10.0,
                 dotWidth: 10.0,
-                spacing: 5.0), // your preferred effect
-            onDotClicked: (index) {},
+                spacing: 5.0),
           ),
           CommonButton(
             padding:
                 const EdgeInsets.only(left: 48, right: 48, bottom: 8, top: 32),
-            buttonText: AppLocalizations(context).of("login"),
+            buttonText: "Login",
             onTap: () {
-              NavigationServices(context).gotoLoginScreen();
+              Get.to(LoginScreen());
             },
           ),
           CommonButton(
@@ -102,7 +96,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
             backgroundColor: AppTheme.backgroundColor,
             textColor: AppTheme.primaryTextColor,
             onTap: () {
-              NavigationServices(context).gotoSignupScreen();
+              Get.to(const SignUpScreen());
             },
           ),
           SizedBox(

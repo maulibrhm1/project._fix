@@ -29,7 +29,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final appTheme = Provider.of<ThemeProvider>(context);
     return Container(
       child: Scaffold(
         body: Stack(
@@ -91,7 +90,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         left: 48, right: 48, bottom: 8, top: 8),
                     buttonText: AppLocalizations(context).of("get_started"),
                     onTap: () {
-                      NavigationServices(context).gotoIntroductionScreen();
+                      Get.to(() => IntroductionScreen());
                     },
                   ),
                 ),
@@ -115,7 +114,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            NavigationServices(context).gotoLoginScreen();
+                            Get.to(() => LoginScreen());
                           },
                           child: Text(
                             AppLocalizations(context).of("login"),

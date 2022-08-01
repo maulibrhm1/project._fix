@@ -1,7 +1,7 @@
 part of "notes_components.dart";
 
 class NotesButton extends StatelessWidget {
-  final String label;
+  final String? label;
   final IconData? icon;
   final double? width;
   final double? height;
@@ -32,7 +32,7 @@ class NotesButton extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    label,
+                    label!,
                     textAlign: TextAlign.center,
                   ),
                   Icon(

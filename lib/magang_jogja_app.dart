@@ -1,13 +1,18 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hotel_booking_ui/common/common.dart';
+import 'package:flutter_hotel_booking_ui/controller/auth_controller.dart';
 import 'package:flutter_hotel_booking_ui/language/appLocalizations.dart';
+import 'package:flutter_hotel_booking_ui/main_page.dart';
+import 'package:flutter_hotel_booking_ui/modules/bottom_tab/bottom_tab_screen.dart';
 import 'package:flutter_hotel_booking_ui/modules/splash/splash.dart';
 import 'package:flutter_hotel_booking_ui/providers/theme_provider.dart';
 import 'package:flutter_hotel_booking_ui/utils/enum.dart';
 import 'package:flutter_hotel_booking_ui/routes/routes.dart';
+import 'package:flutter_hotel_booking_ui/utils/snack_bar.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +20,9 @@ import 'package:provider/provider.dart';
 BuildContext? applicationcontext;
 
 class MagangJogjaApp extends StatefulWidget {
+  final authC = Get.put(AuthController(), permanent: true);
+
+  MagangJogjaApp({Key? key}) : super(key: key);
   @override
   _MagangJogjaAppState createState() => _MagangJogjaAppState();
 }
@@ -25,9 +33,11 @@ class _MagangJogjaAppState extends State<MagangJogjaApp> {
     return Consumer<ThemeProvider>(
       builder: (_, provider, child) {
         applicationcontext = context;
-
         final ThemeData _theme = provider.themeData;
         return GetMaterialApp(
+          scaffoldMessengerKey: Utils.messengerKey,
+          initialRoute: "/",
+          getPages: RoutesName.pages,
           localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
@@ -41,10 +51,9 @@ class _MagangJogjaAppState extends State<MagangJogjaApp> {
             Locale('ar'), //Arebic
           ],
           navigatorKey: navigatorKey,
-          title: 'Motel',
+          title: 'MagangJogja',
           debugShowCheckedModeBanner: false,
           theme: _theme,
-          routes: _buildRoutes(),
           builder: (BuildContext context, Widget? child) {
             _setFirstTimeSomeData(context, _theme);
             return Directionality(
@@ -104,8 +113,9 @@ class _MagangJogjaAppState extends State<MagangJogjaApp> {
 
   Map<String, WidgetBuilder> _buildRoutes() {
     return {
-      RoutesName.Splash: (BuildContext context) => SplashScreen(),
-      RoutesName.IntroductionScreen: (BuildContext context) =>
+      RoutesName.main: (context) => MainPage(),
+      RoutesName.splash: (BuildContext context) => SplashScreen(),
+      RoutesName.introductionscreen: (BuildContext context) =>
           IntroductionScreen(),
     };
   }

@@ -3,8 +3,10 @@
 part of 'topup_components.dart';
 
 class PaymentDetail extends StatefulWidget {
+  final int? index;
   const PaymentDetail({
     Key? key,
+    this.index,
   }) : super(key: key);
 
   @override
@@ -13,7 +15,7 @@ class PaymentDetail extends StatefulWidget {
 
 class _PaymentDetailState extends State<PaymentDetail> {
   List<String> data = [];
-  static const countdownDuration = Duration(seconds: 5);
+  static const countdownDuration = Duration(minutes: 5);
 
   var date = new DateTime.now();
   Duration duration = Duration();
@@ -27,15 +29,20 @@ class _PaymentDetailState extends State<PaymentDetail> {
 
   void timeCountdown() {
     final countdown = 1;
-    setState(() {
-      final seconds = duration.inSeconds;
-      final hours = duration.inHours;
-      if (seconds <= 0) {
-        timer?.cancel();
-      } else {
-        duration = Duration(seconds: seconds - countdown);
-      }
-    });
+    if (mounted) {
+      setState(() {
+        final seconds = duration.inSeconds;
+        final minutes = duration.inMinutes;
+        final hours = duration.inHours;
+        final stop = duration.inMinutes <= 0 ? 0 : 59;
+        if (seconds <= 0) {
+          timer?.cancel();
+          duration = Duration(minutes: minutes - seconds, seconds: stop);
+        } else {
+          duration = Duration(seconds: seconds - countdown);
+        }
+      });
+    }
   }
 
   void startTimer() {
@@ -59,7 +66,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
                   margin: EdgeInsets.only(left: 30, top: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: const [
                       Text(
                         'Pembayaran',
                         style: TextStyle(
@@ -108,62 +115,63 @@ class _PaymentDetailState extends State<PaymentDetail> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 10, bottom: 50),
-                  padding: EdgeInsets.all(10),
-                  child: Column(children: [
-                    if (panduanIndex == 0) ...[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: ovo.map((e) => textList(e)).toList(),
-                      )
-                    ] else if (panduanIndex == 1) ...[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: dana.map((e) => textList(e)).toList(),
-                      )
-                    ] else if (panduanIndex == 2) ...[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: gopay.map((e) => textList(e)).toList(),
-                      )
-                    ] else if (panduanIndex == 3) ...[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: gopay.map((e) => textList(e)).toList(),
-                      )
-                    ] else if (panduanIndex == 4) ...[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: gopay.map((e) => textList(e)).toList(),
-                      )
-                    ] else if (panduanIndex == 5) ...[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: gopay.map((e) => textList(e)).toList(),
-                      )
-                    ] else if (panduanIndex == 6) ...[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: gopay.map((e) => textList(e)).toList(),
-                      )
-                    ] else if (panduanIndex == 7) ...[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: gopay.map((e) => textList(e)).toList(),
-                      )
-                    ] else if (panduanIndex == 8) ...[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: gopay.map((e) => textList(e)).toList(),
-                      )
-                    ] else if (panduanIndex == 9) ...[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: gopay.map((e) => textList(e)).toList(),
-                      )
-                    ]
-                  ]),
-                )
+                    margin: EdgeInsets.only(top: 10, bottom: 50),
+                    padding: EdgeInsets.all(10),
+                    child: topupDescription[widget.index!]
+                    // Column(children: [
+                    //   if (panduanIndex == 0) ...[
+                    //     Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: ovo.map((e) => textList(e)).toList(),
+                    //     )
+                    //   ] else if (panduanIndex == 1) ...[
+                    //     Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: dana.map((e) => textList(e)).toList(),
+                    //     )
+                    //   ] else if (panduanIndex == 2) ...[
+                    //     Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: gopay.map((e) => textList(e)).toList(),
+                    //     )
+                    //   ] else if (panduanIndex == 3) ...[
+                    //     Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: gopay.map((e) => textList(e)).toList(),
+                    //     )
+                    //   ] else if (panduanIndex == 4) ...[
+                    //     Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: gopay.map((e) => textList(e)).toList(),
+                    //     )
+                    //   ] else if (panduanIndex == 5) ...[
+                    //     Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: gopay.map((e) => textList(e)).toList(),
+                    //     )
+                    //   ] else if (panduanIndex == 6) ...[
+                    //     Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: gopay.map((e) => textList(e)).toList(),
+                    //     )
+                    //   ] else if (panduanIndex == 7) ...[
+                    //     Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: gopay.map((e) => textList(e)).toList(),
+                    //     )
+                    //   ] else if (panduanIndex == 8) ...[
+                    //     Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: gopay.map((e) => textList(e)).toList(),
+                    //     )
+                    //   ] else if (panduanIndex == 9) ...[
+                    //     Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: gopay.map((e) => textList(e)).toList(),
+                    //     )
+                    //   ]
+                    // ]),
+                    )
               ],
             ),
           ],
